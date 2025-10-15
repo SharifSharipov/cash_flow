@@ -1,0 +1,137 @@
+name: cash_flow
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State management
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+
+  # Dependency injection
+  get_it: ^8.2.0
+
+  # JSON serialization
+  freezed: ^2.4.3
+  json_serializable: ^6.5.4
+  json_annotation: ^4.9.0
+  freezed_annotation: ^2.4.1
+
+  # Format phone number or date input
+  mask_text_input_formatter: ^2.9.0
+
+  # Reduced animation effect when pressing buttons 
+  scale_button: ^2.1.2
+
+  # Path
+  path_provider: ^2.1.5
+
+  # For entry, exit, and other animations
+  animate_do: ^4.2.0
+
+  # Router
+  go_router: ^16.1.0
+
+  # REST API
+  dio: ^5.8.0+1
+  dio_retry_plus: ^2.0.8
+  http_parser: ^4.1.2
+
+  # Database
+  sqflite: ^2.4.2
+
+  # SVG
+  flutter_svg: ^2.2.0
+
+  # Toast
+  fluttertoast: ^8.0.9
+
+  # Internationalization
+  intl: ^0.20.2
+  intl_utils: ^2.8.5
+
+  # Local storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Downloads and caches images from the Internet
+  cached_network_image: ^3.4.1
+
+  # Add space (gap) between widgets
+  gap: ^3.0.1
+
+  # To get the app version
+  package_info_plus: ^9.0.0
+
+  # To open a phone number, link, or email
+  url_launcher: ^6.3.2
+
+  # Custom Accordion
+  animated_custom_dropdown: ^3.1.1
+
+  # Network info plus
+  network_info_plus: ^6.1.4
+
+  # Device info
+  device_info_plus: ^11.5.0
+
+  # Permission handler
+  permission_handler: ^12.0.1
+
+  # Path
+  path: ^1.9.1
+
+  # Flutter local notifications
+  flutter_local_notifications: ^19.4.2
+
+  # Time zone
+  timezone: ^0.10.1
+
+  # Keyboard listener
+  flutter_keyboard_visibility: ^6.0.0
+
+  # Change app icon
+  flutter_launcher_icons: ^0.14.4
+
+  # Chuck
+  chuck_interceptor: ^2.2.6
+
+  # Bloc concurrency
+  bloc_concurrency: ^0.3.0
+
+  # Diagram
+  fl_chart: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  analyzer: ^7.4.5
+  build_runner: ^2.4.13
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/fonts/
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter.ttf
+          style: italic
+
+flutter_intl:
+  enabled: true
+  arb_dir: lib/l10n
+  output_dir: lib/generated

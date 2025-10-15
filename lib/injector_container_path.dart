@@ -1,0 +1,19 @@
+
+import 'package:cash_flow/features/data/repository/transaction_repository_impl.dart';
+import 'package:cash_flow/features/domain/repository/transaction_repository.dart';
+import 'package:cash_flow/features/domain/usecase/add_transaction/add_transaction.dart';
+import 'package:cash_flow/features/domain/usecase/clear_all_transactions/clear_all_transactions.dart';
+import 'package:cash_flow/features/domain/usecase/delete_transaction/delete_transaction.dart';
+import 'package:cash_flow/features/domain/usecase/get_all_transactions/get_all_transactions.dart';
+import 'package:cash_flow/features/domain/usecase/get_balance/get_balance.dart';
+import 'package:cash_flow/features/domain/usecase/get_monthly_analytics/get_monthly_analytics.dart';
+import 'package:cash_flow/features/domain/usecase/get_total_expense/get_total_expense.dart';
+import 'package:cash_flow/features/domain/usecase/get_total_income/get_total_income.dart';
+import 'package:cash_flow/features/domain/usecase/get_transactions_by_type/get_transactions_by_type.dart';
+import 'package:cash_flow/features/domain/usecase/update_transaction/update_transaction.dart';
+import 'package:cash_flow/features/presentation/blocs/add_transaction_bloc/add_transaction_bloc.dart';
+import 'package:cash_flow/features/presentation/blocs/analytics_bloc/analytics_bloc_bloc.dart';
+import 'package:cash_flow/features/presentation/blocs/transaction_bloc_bloc/transaction_bloc_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:cash_flow/features/data/data_source/local_data_base.dart';
+part 'injector_container.dart';
