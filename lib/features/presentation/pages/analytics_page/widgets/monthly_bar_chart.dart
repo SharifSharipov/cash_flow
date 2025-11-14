@@ -30,6 +30,16 @@ class MonthlyBarChart extends StatelessWidget {
         ? 0.0
         : sortedEntries.map((e) => e.value.abs()).reduce((a, b) => a > b ? a : b);
 
+    // Agar barcha qiymatlar 0 bo'lsa, diagramma ko'rsatilmasin
+    if (maxValue == 0) {
+      return Center(
+        child: Text(
+          'Нет данных для отображения',
+          style: context.textStyle.bodyBody,
+        ),
+      );
+    }
+
     return Column(
       spacing: he(16),
       children: [
@@ -154,7 +164,7 @@ class MonthlyBarChart extends StatelessWidget {
               gridData: FlGridData(
                 show: true,
                 drawVerticalLine: false,
-                horizontalInterval: maxValue / 5,
+                horizontalInterval: maxValue > 0 ? maxValue / 5 : 1,
                 getDrawingHorizontalLine: (value) {
                   return FlLine(
                     color: context.isDarkMode

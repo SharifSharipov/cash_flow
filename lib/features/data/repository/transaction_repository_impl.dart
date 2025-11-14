@@ -127,4 +127,14 @@ class TransactionRepositoryImpl implements TransactionRepository {
       return Left(DatabaseFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Map<String, double>>> getExpensesByCategory() async {
+    try {
+      final result = await database.getExpensesByCategory();
+      return Right(result);
+    } catch (e) {
+      return Left(DatabaseFailure(message: e.toString()));
+    }
+  }
 }

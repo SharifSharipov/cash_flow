@@ -66,64 +66,105 @@ class _TransactionsPageState extends State<TransactionsPage>
             ),
           ),
         ),
-        body: ListView.builder(
-          itemBuilder: (BuildContext context, int index) =>
-              state.transactions.isEmpty
-              ? Center(
+        body:  state.transactions.isEmpty?Center(
                   child: Text(
                     "Нет записей",
                     style: context.textStyle.bodyBody,
                   ),
-                )
-              : CustomDecorationWidget(
-                  child: [
-                    CustomInkWidget(
-                      key: Key('transaction_item_$index'), 
-                      onTap: () => context
-                          .pushNamed(
-                            Routes.addEdit,
-                            extra: TransactionEntity(
-                              note: "Редактировать операцию",
-                              type: '',
-                              category: '',
-                              amount: 0,
-                              date: DateTime.now(),
-                              income: 1,
-                              id: state.transactions[index].id,
-                            ),
-                          )
-                          .then((_) {
-                            bloc.add(TransactionBlocEvent.getAll());
-                          }),
+                ): ListView.builder(
+          itemBuilder: (BuildContext context, int index) =>
+             Dismissible(
+                  key: Key('dismissible_transaction_${state.transactions[index].id}'),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
                       borderRadius: AppUtils.kBorderRadius12,
-                      child: Column(
-                        spacing: he(10),
-                        children: [
-                          TranscationsTextWidgets(
-                            textL: "Категория:",
-                            textR: state.transactions[index].category,
+                    ),
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ).paddingOnly(right: wi(20)),
+                  ),
+                  confirmDismiss: (direction) async {
+                    return await showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: Text('Подтверждение'),
+                        content: Text('Вы действительно хотите удалить эту операцию?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: Text('Отмена'),
                           ),
-                          TranscationsTextWidgets(
-                            textL: "Описание:",
-                            textR: state.transactions[index].type,
-                          ),
-                          TranscationsTextWidgets(
-                            textL: "Сумма:",
-                            textR: Formatter.formatCurrency(state.transactions[index].amount),
-                          ),
-                          TranscationsTextWidgets(
-                            textL: "Дата:",
-                            textR: DateFormat('EEEE, dd MMM yyyy', 'ru').format(
-                              DateTime.parse(
-                                state.transactions[index].date.toString(),
-                              ),
-                            ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: Text('Удалить', style: TextStyle(color: Colors.red)),
                           ),
                         ],
-                      ).paddingSymmetric(horizontal: wi(12), vertical: he(6)),
-                    ),
-                  ],
-                ).paddingOnly(top: he(index == 0 ? 16 : 0), bottom: he(10)),
+                      ),
+                    );
+                  },
+                  onDismissed: (direction) {
+                    bloc.add(TransactionBlocEvent.delete(delete: state.transactions[index].id!));
+                    // Tranzaksiya o'chirilgandan keyin ro'yxatni yangilash
+                    Future.delayed(Duration(milliseconds: 300), () {
+                      if (mounted) {
+                        bloc.add(TransactionBlocEvent.getAll());
+                      }
+                    });
+                  },
+                  child: CustomDecorationWidget(
+                    child: [
+                      CustomInkWidget(
+                        key: Key('transaction_item_$index'),
+                        onTap: () => context
+                            .pushNamed(
+                              Routes.addEdit,
+                              extra: TransactionEntity(
+                                note: "Редактировать операцию",
+                                type: '',
+                                category: '',
+                                amount: 0,
+                                date: DateTime.now(),
+                                income: 1,
+                                id: state.transactions[index].id,
+                              ),
+                            )
+                            .then((_) {
+                              bloc.add(TransactionBlocEvent.getAll());
+                            }),
+                        borderRadius: AppUtils.kBorderRadius12,
+                        child: Column(
+                          spacing: he(10),
+                          children: [
+                            TranscationsTextWidgets(
+                              textL: "Категория:",
+                              textR: state.transactions[index].category,
+                            ),
+                            TranscationsTextWidgets(
+                              textL: "Описание:",
+                              textR: state.transactions[index].type,
+                            ),
+                            TranscationsTextWidgets(
+                              textL: "Сумма:",
+                              textR: Formatter.formatCurrency(state.transactions[index].amount),
+                            ),
+                            TranscationsTextWidgets(
+                              textL: "Дата:",
+                              textR: DateFormat('EEEE, dd MMM yyyy', 'ru').format(
+                                DateTime.parse(
+                                  state.transactions[index].date.toString(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ).paddingSymmetric(horizontal: wi(12), vertical: he(6)),
+                      ),
+                    ],
+                  ).paddingOnly(top: he(index == 0 ? 16 : 0), bottom: he(10)),
+                ),
 
           itemCount: state.transactions.length,
         ).paddingSymmetric(horizontal: wi(he(16))),

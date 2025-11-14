@@ -20,4 +20,5 @@ abstract class TransactionRepository {
   Future<Either<Failure, Map<String, double>>> getMonthlyAnalytics({
     required DateTime month,
   });
+  Future<Either<Failure, Map<String, double>>> getExpensesByCategory();
 }

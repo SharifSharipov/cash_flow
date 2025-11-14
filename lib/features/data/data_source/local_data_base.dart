@@ -144,13 +144,13 @@ class LocalDatabase {
         DateTime(month.year, month.month + 1, 1).toIso8601String();
 
     final incomeResult = await db.rawQuery('''
-      SELECT SUM(${TransactionSQL.amount}) as total 
+      SELECT SUM(${TransactionSQL.amount}) as total
       FROM ${TransactionSQL.tableName}
       WHERE ${TransactionSQL.isIncome} = 1 AND ${TransactionSQL.date} >= ? AND ${TransactionSQL.date} < ?
     ''', [start, end]);
 
     final expenseResult = await db.rawQuery('''
-      SELECT SUM(${TransactionSQL.amount}) as total 
+      SELECT SUM(${TransactionSQL.amount}) as total
       FROM ${TransactionSQL.tableName}
       WHERE ${TransactionSQL.isIncome} = 0 AND ${TransactionSQL.date} >= ? AND ${TransactionSQL.date} < ?
     ''', [start, end]);
@@ -163,5 +163,25 @@ class LocalDatabase {
       'expense': expense,
       'balance': income - expense,
     };
+  }
+
+  Future<Map<String, double>> getExpensesByCategory() async {
+    final db = await _init();
+    final result = await db.rawQuery('''
+      SELECT ${TransactionSQL.category}, SUM(${TransactionSQL.amount}) as total
+      FROM ${TransactionSQL.tableName}
+      WHERE ${TransactionSQL.isIncome} = 0
+      GROUP BY ${TransactionSQL.category}
+    ''');
+
+    final Map<String, double> categoryExpenses = {};
+    for (var row in result) {
+      final category = row['category'] as String;
+      final total = (row['total'] as num?)?.toDouble() ?? 0.0;
+      if (total > 0) {
+        categoryExpenses[category] = total;
+      }
+    }
+    return categoryExpenses;
   }
 }

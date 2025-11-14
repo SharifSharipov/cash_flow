@@ -15,10 +15,12 @@ class IncomeExpensePieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = income + expense;
+    // Absolyut qiymatlardan foydalanamiz
+    final absIncome = income.abs();
+    final absExpense = expense.abs();
 
-    // Agar hech qanday ma'lumot bo'lmasa
-    if (total == 0) {
+    // Agar kirim bo'lmasa
+    if (absIncome == 0) {
       return Center(
         child: Text(
           'Нет данных для отображения',
@@ -27,11 +29,16 @@ class IncomeExpensePieChart extends StatelessWidget {
       );
     }
 
+    // Kirimdan qancha foiz sarflanganini hisoblash
+    final balance = absIncome - absExpense;
+    final expensePercent = (absExpense / absIncome * 100);
+    final balancePercent = (balance / absIncome * 100);
+
     return Column(
       spacing: he(16),
       children: [
         Text(
-          'Соотношение доходов и расходов',
+          'Распределение доходов',
           style: context.textStyle.bodyBody.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -42,28 +49,30 @@ class IncomeExpensePieChart extends StatelessWidget {
           child: PieChart(
             PieChartData(
               sections: [
-                PieChartSectionData(
-                  color: Colors.green.shade400,
-                  value: income,
-                  title: '${(income / total * 100).toStringAsFixed(1)}%',
-                  radius: 100,
-                  titleStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                if (absExpense > 0)
+                  PieChartSectionData(
+                    color: Colors.red.shade400,
+                    value: absExpense,
+                    title: '${expensePercent.toStringAsFixed(1)}%',
+                    radius: 100,
+                    titleStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                PieChartSectionData(
-                  color: Colors.red.shade400,
-                  value: expense,
-                  title: '${(expense / total * 100).toStringAsFixed(1)}%',
-                  radius: 100,
-                  titleStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                if (balance > 0)
+                  PieChartSectionData(
+                    color: Colors.green.shade400,
+                    value: balance,
+                    title: '${balancePercent.toStringAsFixed(1)}%',
+                    radius: 100,
+                    titleStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
               ],
               sectionsSpace: 2,
               centerSpaceRadius: 40,
@@ -77,15 +86,15 @@ class IncomeExpensePieChart extends StatelessWidget {
           children: [
             _buildLegendItem(
               context,
-              color: Colors.green.shade400,
-              label: 'Доход',
-              value: Formatter.formatCurrency(income),
+              color: Colors.red.shade400,
+              label: 'Расход',
+              value: Formatter.formatCurrency(absExpense),
             ),
             _buildLegendItem(
               context,
-              color: Colors.red.shade400,
-              label: 'Расход',
-              value: Formatter.formatCurrency(expense),
+              color: Colors.green.shade400,
+              label: 'Остаток',
+              value: Formatter.formatCurrency(balance),
             ),
           ],
         ),
