@@ -36,15 +36,15 @@ class AnalyticsBlocBloc extends Bloc<AnalyticsBlocEvent, AnalyticsBlocState> {
     final expenseResult = await getTotalExpense(NoParams());
     final balanceResult = await getBalance(NoParams());
 
-    final income = incomeResult.fold((failure) => 0, (value) => value);
-    final expense = expenseResult.fold((failure) => 0, (value) => value);
-    final balance = balanceResult.fold((failure) => 0, (value) => value);
+    final income = incomeResult.fold((failure) => 0.0, (value) => value);
+    final expense = expenseResult.fold((failure) => 0.0, (value) => value);
+    final balance = balanceResult.fold((failure) => 0.0, (value) => value);
 
     emit(state.copyWith(
       status: Status.success,
-      income: income.toDouble(),
-      expense: expense.toDouble(),
-      balance: balance.toDouble(),
+      income: income,
+      expense: expense,
+      balance: balance,
     ));
   }
 

@@ -40,8 +40,8 @@ class _TransactionsPageState extends State<TransactionsPage>
                 .pushNamed(
                   Routes.addEdit,
                   extra: TransactionEntity(
-                    note: "Add Transaction Page",
-                    type: 'Add transaction',
+                    note: "Добавить операцию",
+                    type: '',
                     category: '',
                     amount: 0,
                     date: DateTime.now(),
@@ -56,7 +56,7 @@ class _TransactionsPageState extends State<TransactionsPage>
               color: context.isDarkMode ? Colors.white : Colors.black,
             ),
           ),
-          title: "Transactions page",
+          title: "Мои операции",
           actions: IconButton(
             key: const Key('analytics_button'), 
             onPressed: () => context.pushNamed(Routes.analytics),
@@ -71,7 +71,7 @@ class _TransactionsPageState extends State<TransactionsPage>
               state.transactions.isEmpty
               ? Center(
                   child: Text(
-                    "No transactions",
+                    "Нет записей",
                     style: context.textStyle.bodyBody,
                   ),
                 )
@@ -83,8 +83,8 @@ class _TransactionsPageState extends State<TransactionsPage>
                           .pushNamed(
                             Routes.addEdit,
                             extra: TransactionEntity(
-                              note: "Update Transaction Page",
-                              type: 'Update transaction',
+                              note: "Редактировать операцию",
+                              type: '',
                               category: '',
                               amount: 0,
                               date: DateTime.now(),
@@ -100,20 +100,20 @@ class _TransactionsPageState extends State<TransactionsPage>
                         spacing: he(10),
                         children: [
                           TranscationsTextWidgets(
-                            textL: "Transaction name:",
+                            textL: "Категория:",
                             textR: state.transactions[index].category,
                           ),
                           TranscationsTextWidgets(
-                            textL: "Transaction type:",
+                            textL: "Описание:",
                             textR: state.transactions[index].type,
                           ),
                           TranscationsTextWidgets(
-                            textL: "Transaction amount:",
-                            textR: state.transactions[index].amount.toString(),
+                            textL: "Сумма:",
+                            textR: Formatter.formatCurrency(state.transactions[index].amount),
                           ),
                           TranscationsTextWidgets(
-                            textL: "Transaction date:",
-                            textR: DateFormat('EEEE, dd MMM yyyy', 'en').format(
+                            textL: "Дата:",
+                            textR: DateFormat('EEEE, dd MMM yyyy', 'ru').format(
                               DateTime.parse(
                                 state.transactions[index].date.toString(),
                               ),

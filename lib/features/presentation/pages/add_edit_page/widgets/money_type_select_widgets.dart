@@ -29,7 +29,7 @@ class MoneyTypeSelectWidgets extends StatelessWidget {
                 flex: 5,
                 child: CustomButton(
                   key: const Key('insert_money_button'),
-                  text: "Insert money",
+                  text: "Доход",
                   onTap: onTapInsertMoney,
                   textColor: Colors.black,
                 ),
@@ -37,8 +37,8 @@ class MoneyTypeSelectWidgets extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: CustomButton(
-                  key: const Key('withdraw_money_button'), 
-                  text: "Withdraw money", 
+                  key: const Key('withdraw_money_button'),
+                  text: "Расход",
                   onTap: onTapWithdrawMoney,
                   textColor: Colors.black,
                 ),

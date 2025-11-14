@@ -9,6 +9,36 @@ sealed class Formatter {
     type: MaskAutoCompletionType.eager,
   );
 
+  /// Format amount as currency with symbol
+  /// Example: formatCurrency(1234567.89) returns "1,234,567.89 so'm"
+  static String formatCurrency(double amount) {
+    final isNegative = amount < 0;
+    final absoluteAmount = amount.abs();
+
+    // Split into integer and decimal parts
+    final integerPart = absoluteAmount.floor();
+    final decimalPart = ((absoluteAmount - integerPart) * 100).round();
+
+    // Format integer part with thousand separators
+    final integerStr = integerPart.toString();
+    final buffer = StringBuffer();
+    var count = 0;
+
+    for (var i = integerStr.length - 1; i >= 0; i--) {
+      if (count > 0 && count % 3 == 0) {
+        buffer.write(',');
+      }
+      buffer.write(integerStr[i]);
+      count++;
+    }
+
+    final formattedInteger = buffer.toString().split('').reversed.join();
+    final formattedDecimal = decimalPart.toString().padLeft(2, '0');
+
+    final sign = isNegative ? '-' : '';
+    return "$sign$formattedInteger.$formattedDecimal so'm";
+  }
+
 
   // static String formatPhoneNumber(String input) {
   //   if (input.length != 12 || !input.startsWith('998')) {

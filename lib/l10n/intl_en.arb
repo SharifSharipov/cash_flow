@@ -1,1 +1,59 @@
-{}
+{
+  "@@locale": "ru",
+  "analytics_page": "Аналитика",
+  "@analytics_page": {
+    "description": "Заголовок страницы аналитики"
+  },
+  "total_income": "Общий доход",
+  "@total_income": {
+    "description": "Метка для общей суммы дохода"
+  },
+  "total_expense": "Общий расход",
+  "@total_expense": {
+    "description": "Метка для общей суммы расхода"
+  },
+  "balance": "Баланс",
+  "@balance": {
+    "description": "Метка для текущего баланса"
+  },
+  "monthly_analytics": "Месячная аналитика",
+  "@monthly_analytics": {
+    "description": "Заголовок раздела месячной аналитики"
+  },
+  "money_type": "Описание",
+  "@money_type": {
+    "description": "Описание операции"
+  },
+  "category": "Категория",
+  "@category": {
+    "description": "Категория операции (например: еда, транспорт, зарплата)"
+  },
+  "amount": "Сумма",
+  "@amount": {
+    "description": "Сумма денег"
+  },
+  "select_money_type": "Выберите тип операции",
+  "@select_money_type": {
+    "description": "Выбор типа денежной операции"
+  },
+  "insert_money": "Доход",
+  "@insert_money": {
+    "description": "Доход (получение денег)"
+  },
+  "withdraw_money": "Расход",
+  "@withdraw_money": {
+    "description": "Расход (трата денег)"
+  },
+  "add": "Добавить",
+  "@add": {
+    "description": "Кнопка добавления"
+  },
+  "update": "Обновить",
+  "@update": {
+    "description": "Кнопка обновления"
+  },
+  "please_fill_all_fields": "Пожалуйста, заполните все поля",
+  "@please_fill_all_fields": {
+    "description": "Сообщение об ошибке при незаполненных полях"
+  }
+}

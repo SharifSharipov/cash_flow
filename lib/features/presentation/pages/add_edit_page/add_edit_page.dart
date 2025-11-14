@@ -25,7 +25,7 @@ class _AddEditPageState extends State<AddEditPage> with AddEditMixin {
   Widget build(BuildContext context) {
     return BlocBuilder<AddTransactionBloc, AddTransactionState>(
       builder: (context, state) {
-        final isAdd = widget.data.note == "Add Transaction Page";
+        final isAdd = widget.data.note == "Добавить операцию";
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: CustomAppBar(
@@ -49,24 +49,24 @@ class _AddEditPageState extends State<AddEditPage> with AddEditMixin {
                       spacing: he(10),
                       children: [
                         CustomTextField(
-                          key: const Key('money_type_field'), 
-                          hintText: "Money type",
+                          key: const Key('money_type_field'),
+                          hintText: "Описание",
                           textInputType: TextInputType.text,
                           textEditingController: nameController,
                           focusNode: nameFocusNode,
                           textInputAction: TextInputAction.next,
                         ),
                         CustomTextField(
-                          key: const Key('category_field'), 
-                          hintText: "Category",
+                          key: const Key('category_field'),
+                          hintText: "Категория",
                           textInputType: TextInputType.text,
                           textEditingController: categoryController,
                           focusNode: categoryFocusNode,
                           textInputAction: TextInputAction.next,
                         ),
                         CustomTextField(
-                          key: const Key('amount_field'), 
-                          hintText: "Amount",
+                          key: const Key('amount_field'),
+                          hintText: "Сумма",
                           textInputType: TextInputType.number,
                           textEditingController: amountController,
                           focusNode: amountFocusNode,
@@ -75,26 +75,26 @@ class _AddEditPageState extends State<AddEditPage> with AddEditMixin {
                         MoneyTypeSelectWidgets(
                           key: const Key('select_money_type_button'), 
                           label: state.index == null
-                              ? "Select money type"
-                              : (state.index == 0
-                                  ? "Insert money"
-                                  : "Withdraw money"),
+                              ? "Выберите тип операции"
+                              : (state.index == 1
+                                  ? "Доход"
+                                  : "Расход"),
                           onTapInsertMoney: () {
                             bloc.add(
-                              AddTransactionEvent.selectMoneyType(index: 0),
+                              AddTransactionEvent.selectMoneyType(index: 1),
                             );
                           },
                           onTapWithdrawMoney: () {
                             bloc.add(
-                              AddTransactionEvent.selectMoneyType(index: 1),
+                              AddTransactionEvent.selectMoneyType(index: 0),
                             );
                           },
                         ),
                       ],
                     ),
                     CustomButton(
-                      key: const Key('submit_button'), 
-                      text: isAdd ? "Add" : "Update",
+                      key: const Key('submit_button'),
+                      text: isAdd ? "Добавить" : "Обновить",
                       isLoading: state.status == Status.loading,
                       textColor: Colors.black,
                       onTap: () {
@@ -132,7 +132,7 @@ class _AddEditPageState extends State<AddEditPage> with AddEditMixin {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text("Please fill all fields"),
+                              content: Text("Пожалуйста, заполните все поля"),
                             ),
                           );
                         }

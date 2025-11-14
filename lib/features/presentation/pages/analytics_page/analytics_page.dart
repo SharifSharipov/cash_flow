@@ -3,6 +3,8 @@ import 'package:cash_flow/core/extension/extension.dart';
 import 'package:cash_flow/core/utils/utils.dart';
 import 'package:cash_flow/features/presentation/blocs/analytics_bloc/analytics_bloc_bloc.dart';
 import 'package:cash_flow/features/presentation/pages/analytics_page/analytics_mixin.dart';
+import 'package:cash_flow/features/presentation/pages/analytics_page/widgets/income_expense_pie_chart.dart';
+import 'package:cash_flow/features/presentation/pages/analytics_page/widgets/monthly_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,55 +22,150 @@ class _AnalyticsPageState extends State<AnalyticsPage> with AnalyticsMixin {
         builder: (context, state) => Scaffold(
           appBar: CustomAppBar(
             key: const Key('analytics_page'),
-            title: "Analytics page",
+            title: "Аналитика",
           ),
-          body: Column(
-            spacing: he(10),
-
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                key: const Key('total_income'),
-                "Total Income: ${state.income.toStringAsFixed(2)}",
-                style: context.textStyle.bodyBody,
-              ),
-              Text(
-                key: const Key('total_expense'),
-                "Total Expense: ${state.expense.toStringAsFixed(2)}",
-                style: context.textStyle.bodyBody,
-              ),
-              Text(
-                key: const Key('balance'),
-                "Balance: ${state.balance.toStringAsFixed(2)}",
-                style: context.textStyle.bodyBody,
-              ),
-              Text(
-                key: const Key('monthly_analytics'),
-                "Monthly Analytics",
-                style: context.textStyle.bodyBody,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: state.monthlyData.length,
-                  itemBuilder: (context, index) {
-                    final key = state.monthlyData.keys.elementAt(index);
-                    final value = state.monthlyData[key];
-                    return ListTile(
-                      key: const Key('title'),
-                      tileColor: context.isDarkMode
-                          ? const Color.fromARGB(255, 57, 66, 64)
-                          : const Color.fromARGB(255, 249, 247, 247),
-                      title: Text(key, style: context.textStyle.bodyBody),
-                      trailing: Text(
-                        value?.toStringAsFixed(2) ?? '0',
-                        style: context.textStyle.bodyBody,
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: wi(16)),
+            child: Column(
+              spacing: he(20),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Общая информация
+                Container(
+                  padding: EdgeInsets.all(wi(16)),
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? const Color.fromARGB(255, 57, 66, 64)
+                        : const Color.fromARGB(255, 249, 247, 247),
+                    borderRadius: BorderRadius.circular(wi(12)),
+                  ),
+                  child: Column(
+                    spacing: he(12),
+                    children: [
+                      _buildInfoRow(
+                        context,
+                        label: "Общий доход:",
+                        value: Formatter.formatCurrency(state.income),
+                        color: Colors.green,
                       ),
-                    ).paddingSymmetric(vertical: he(5));
-                  },
+                      _buildInfoRow(
+                        context,
+                        label: "Общий расход:",
+                        value: Formatter.formatCurrency(state.expense),
+                        color: Colors.red,
+                      ),
+                      Divider(color: context.isDarkMode ? Colors.white24 : Colors.black26),
+                      _buildInfoRow(
+                        context,
+                        label: "Баланс:",
+                        value: Formatter.formatCurrency(state.balance),
+                        color: state.balance >= 0 ? Colors.blue : Colors.orange,
+                        isBold: true,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ).paddingSymmetric(horizontal: wi(16)),
+
+                // Круговая диаграмма
+                Container(
+                  padding: EdgeInsets.all(wi(16)),
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? const Color.fromARGB(255, 57, 66, 64)
+                        : const Color.fromARGB(255, 249, 247, 247),
+                    borderRadius: BorderRadius.circular(wi(12)),
+                  ),
+                  child: IncomeExpensePieChart(
+                    income: state.income,
+                    expense: state.expense,
+                  ),
+                ),
+
+                // Столбчатая диаграмма
+                Container(
+                  padding: EdgeInsets.all(wi(16)),
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? const Color.fromARGB(255, 57, 66, 64)
+                        : const Color.fromARGB(255, 249, 247, 247),
+                    borderRadius: BorderRadius.circular(wi(12)),
+                  ),
+                  child: MonthlyBarChart(
+                    monthlyData: state.monthlyData,
+                  ),
+                ),
+
+                // Детальная месячная статистика
+                if (state.monthlyData.isNotEmpty) ...[
+                  Text(
+                    "Детальная статистика по месяцам",
+                    style: context.textStyle.bodyBody.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  ...state.monthlyData.entries.map((entry) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: he(8)),
+                      padding: EdgeInsets.all(wi(12)),
+                      decoration: BoxDecoration(
+                        color: context.isDarkMode
+                            ? const Color.fromARGB(255, 57, 66, 64)
+                            : const Color.fromARGB(255, 249, 247, 247),
+                        borderRadius: BorderRadius.circular(wi(8)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            entry.key,
+                            style: context.textStyle.bodyBody,
+                          ),
+                          Text(
+                            Formatter.formatCurrency(entry.value),
+                            style: context.textStyle.bodyBody.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: entry.value >= 0 ? Colors.green : Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
+
+                SizedBox(height: he(20)),
+              ],
+            ),
+          ),
         ),
       );
+
+  Widget _buildInfoRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required Color color,
+    bool isBold = false,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: context.textStyle.bodyBody.copyWith(
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        Text(
+          value,
+          style: context.textStyle.bodyBody.copyWith(
+            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+            color: color,
+            fontSize: isBold ? 16 : 14,
+          ),
+        ),
+      ],
+    );
+  }
 }
